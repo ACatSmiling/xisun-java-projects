@@ -1,0 +1,70 @@
+<configuration
+        debug="false"
+        xmlns="http://ch.qos.logback/xml/ns/logback"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://ch.qos.logback/xml/ns/logback
+        https://raw.githubusercontent.com/enricopulatzo/logback-XSD/master/src/main/xsd/logback.xsd"
+>
+    <property name="logging.path" value="./"/>
+    <property name="logging.level" value="DEBUG"/>
+    <property name="message.format"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n%ex{full, DISPLAY_EX_EVAL}"/>
+
+    <!-- 控制台输出日志 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 自定义输出日志到文件 -->
+    <appender name="FileAppender" class="ch.qos.logback.core.FileAppender">
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <file>
+            ${logging.path}/base.log
+        </file>
+        <encoder>
+            <pattern>${message.format}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="FlinkLogFileAppender" class="ch.qos.logback.core.FileAppender">
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <file>
+            ${logging.path}/flink.log
+        </file>
+        <encoder>
+            <pattern>${message.format}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 异步输出日志 -->
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>100</queueSize>
+        <appender-ref ref="FileAppender"/>
+    </appender>
+
+    <!-- 以下包中的日志，输出到flink.log文件 -->
+    <logger name="org.apache.flink" level="DEBUG" additivity="false">
+        <appender-ref ref="FlinkLogFileAppender"/>
+    </logger>
+    <logger name="akka" level="DEBUG" additivity="false">
+        <appender-ref ref="FlinkLogFileAppender"/>
+    </logger>
+    <!--<logger name="org.apache.kafka" level="OFF"/>-->
+
+    <root level="${logging.level}">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="ASYNC"/>
+    </root>
+</configuration>
