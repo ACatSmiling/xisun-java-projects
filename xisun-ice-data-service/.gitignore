@@ -1,9 +1,0 @@
-# jetbrain
-.idea
-*.iml
-
-# mvn
-**/target
-
-# log
-**/*.log
