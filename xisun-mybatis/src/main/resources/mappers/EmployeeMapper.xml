@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xisun.mybatis.mapper.EmployeeMapper">
+    <!-- resultMap：设置自定义映射
+            属性：
+                id：表示自定义映射的唯一标识
+                type：查询的数据要映射的实体类的类型
+            子标签：
+                id：设置主键的映射关系
+                result：设置普通字段的映射关系
+                association：设置多对一的映射关系
+                collection：设置一对多的映射关系
+                    属性：
+                        property：设置映射关系中实体类中的属性名
+                        column：设置映射关系中表中的字段名
+    -->
+    <!--<resultMap id="employee" type="cn.xisun.mybatis.entity.Employee">
+        <id property="id" column="id"></id>
+        <result property="empName" column="emp_name"></result>
+        <result property="age" column="age"></result>
+        <result property="sex" column="sex"></result>
+        <result property="depId" column="dep_id"></result>
+    </resultMap>-->
+
+    <!-- List<Employee> getAllEmployees(); -->
+    <!--<select id="getAllEmployees" resultMap="employee">
+        SELECT * FROM mybatis.employee;
+    </select>-->
+
+
+    <!-- 多对一映射，方式一：级联方式 -->
+    <!--<resultMap id="empAndDepResultMap" type="cn.xisun.mybatis.entity.Employee">
+        <id property="id" column="emp_id"></id>
+        <result property="empName" column="emp_name"></result>
+        <result property="age" column="age"></result>
+        <result property="sex" column="sex"></result>
+        <result property="department.id" column="dep_id"></result>
+        <result property="department.depName" column="dep_name"></result>
+    </resultMap>-->
+
+    <!-- Employee getEmployeeById(@Param("id") Integer id); -->
+    <!--<select id="getEmployeeById" resultMap="empAndDepResultMap">
+        SELECT e.id emp_id, e.emp_name, e.sex, e.age, d.id dep_id, d.dep_name
+        FROM mybatis.employee e
+                 LEFT JOIN mybatis.department d ON e.dep_id = d.id
+        WHERE e.id = #{id};
+    </select>-->
+
+
+    <!-- 多对一映射，方式二：使用association -->
+    <!--<resultMap id="empAndDepResultMap" type="cn.xisun.mybatis.entity.Employee"> &lt;!&ndash; 多的type &ndash;&gt;
+        <id property="id" column="emp_id"></id>
+        <result property="empName" column="emp_name"></result>
+        <result property="age" column="age"></result>
+        <result property="sex" column="sex"></result>
+        &lt;!&ndash;
+           association：处理多对一的映射关系
+                属性：
+                    property：需要处理多对一的映射关系的属性名
+                    javaType：该属性的类型
+        &ndash;&gt;
+        <association property="department" javaType="cn.xisun.mybatis.entity.Department"> &lt;!&ndash; 一的type &ndash;&gt;
+            <id property="id" column="dep_id"></id>
+            <result property="depName" column="dep_name"></result>
+        </association>
+    </resultMap>-->
+
+    <!-- Employee getEmployeeById(@Param("id") Integer id); -->
+    <!--<select id="getEmployeeById" resultMap="empAndDepResultMap">
+        SELECT e.id emp_id, e.emp_name, e.sex, e.age, d.id dep_id, d.dep_name
+        FROM mybatis.employee e
+                 LEFT JOIN mybatis.department d ON e.dep_id = d.id
+        WHERE e.id = #{id};
+    </select>-->
+
+
+    <!-- 多对一映射，方式三：分步查询 -->
+    <resultMap id="employee" type="cn.xisun.mybatis.entity.Employee">
+        <id property="id" column="id"></id>
+        <result property="empName" column="emp_name"></result>
+        <result property="age" column="age"></result>
+        <result property="sex" column="sex"></result>
+        <!--
+            select：设置分步查询，查询某个属性的值的SQL的标识（namespace.sqlId）
+            column：将SQL以及查询结果中的某个字段设置为分步查询的条件
+        -->
+        <association property="department" select="cn.xisun.mybatis.mapper.DepartmentMapper.getDepartmentByStepTwoById"
+                     column="dep_id" fetchType="eager">
+        </association>
+    </resultMap>
+
+    <!-- Employee getEmployeeByStepOneById(@Param("id") Integer id); -->
+    <select id="getEmployeeByStepOneById" resultMap="employee">
+        SELECT * FROM mybatis.employee WHERE id = #{id};
+    </select>
+</mapper>

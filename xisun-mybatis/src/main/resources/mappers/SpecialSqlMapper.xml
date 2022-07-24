@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xisun.mybatis.mapper.SpecialSqlMapper">
+    <!-- List<User> fuzzyQuery(@Param("fuzzy") String fuzzy); -->
+    <select id="fuzzyQuery" resultType="cn.xisun.mybatis.entity.User">
+        <!-- SELECT * FROM mybatis.`user` u WHERE u.name like '%${fuzzy}%'; -->
+        <!-- SELECT * FROM mybatis.`user` u WHERE u.name like concat('%', #{fuzzy}, '%'); -->
+        SELECT * FROM mybatis.`user` u WHERE u.name like "%"#{fuzzy}"%";
+    </select>
+
+    <!-- int deleteMore(@Param("ids") String ids); -->
+    <delete id="deleteMore">
+        <!-- 因为#{}会自动在参数前后加''，最终得到的SQL语句无法执行 -->
+        DELETE FROM mybatis.`user` u WHERE u.id in (${ids});
+    </delete>
+
+    <!-- List<User> getAllUser(@Param("tableName") String tableName); -->
+    <select id="getAllUser" resultType="cn.xisun.mybatis.entity.User">
+        SELECT * FROM ${tableName};
+    </select>
+
+    <!-- int insertUser(User user); -->
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO mybatis.`user`
+        VALUES (null, #{name}, #{sex}, #{age}, #{status}, #{create_time}, #{update_time});
+    </insert>
+</mapper>

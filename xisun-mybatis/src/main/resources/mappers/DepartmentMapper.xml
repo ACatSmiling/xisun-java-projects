@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xisun.mybatis.mapper.DepartmentMapper">
+    <!--<resultMap id="department" type="cn.xisun.mybatis.entity.Department">
+        <id property="id" column="id"></id>
+        <result property="depName" column="dep_name"></result>
+    </resultMap>-->
+
+    <!-- Department getDepartmentByStepTwoById(@Param("id") Integer id); -->
+    <!--<select id="getDepartmentByStepTwoById" resultMap="department">
+        SELECT *
+        FROM mybatis.department
+        WHERE id = #{id};
+    </select>-->
+
+
+    <!-- 一对多映射，方式一： -->
+    <resultMap id="department" type="cn.xisun.mybatis.entity.Department">
+        <id property="id" column="id"></id>
+        <result property="depName" column="dep_name"></result>
+        <collection property="employees" ofType="cn.xisun.mybatis.entity.Employee">
+
+        </collection>
+    </resultMap>
+
+    <!-- Department getDepartmentById(@Param("id") Integer id); -->
+    <select id="getDepartmentById" resultMap="department">
+        SELECT d.id, d.dep_name, e.emp_name, e.sex, e.age
+        FROM mybatis.department d
+                 LEFT JOIN mybatis.employee e ON d.id = e.dep_id
+        WHERE d.id = #{id};
+    </select>
+</mapper>

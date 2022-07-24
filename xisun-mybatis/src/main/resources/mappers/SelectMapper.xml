@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xisun.mybatis.mapper.SelectMapper">
+    <!-- User getUserById(); -->
+    <select id="getUserById" resultType="cn.xisun.mybatis.entity.User">
+        SELECT * FROM mybatis.`user` u WHERE u.id = #{id};
+    </select>
+
+    <!-- List<User> getAllUser(); -->
+    <select id="getAllUser" resultType="cn.xisun.mybatis.entity.User">
+        SELECT * FROM mybatis.`user` u;
+    </select>
+
+    <!-- Integer getTotal(); -->
+    <select id="getTotal" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM mybatis.`user` u;
+    </select>
+
+    <!-- Map<String, Object> getUserToMap(@Param("id") int id); -->
+    <select id="getUserToMap" resultType="java.util.Map">
+        SELECT * FROM mybatis.`user` u WHERE u.id = #{id};
+    </select>
+
+    <!-- 方式一 -->
+    <!-- List<Map<String, Object>> getAllUserToMap(); -->
+    <!--<select id="getAllUserToMap" resultType="java.util.Map">
+        SELECT * FROM mybatis.`user` u;
+    </select>-->
+
+    <!-- 方式二 -->
+    <!-- Map<String, Object> getAllUserToMap(); -->
+    <select id="getAllUserToMap" resultType="java.util.Map">
+        SELECT * FROM mybatis.`user` u;
+    </select>
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 设置MyBatis的全局配置 -->
+    <!-- <settings> -->
+        <!-- 将表字段的_，自动映射为驼峰，例如emp_name映射为empName
+                mapUnderscoreToCamelCase默认为false
+        -->
+        <!-- <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings> -->
+    
+    <settings>
+        <!-- 开启延时加载 -->
+        <setting name="lazyLoadingEnabled" value="true"/>
+    </settings>
+    
+    <!-- 设置连接数据库的环境 -->
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://192.168.10.100:3306/mybatis"/>
+                <property name="username" value="root"/>
+                <property name="password" value="root"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!-- 引入映射文件 -->
+    <mappers>
+        <mapper resource="mappers/UserMapper.xml"/>
+        <mapper resource="mappers/SelectMapper.xml"/>
+        <mapper resource="mappers/SpecialSqlMapper.xml"/>
+        <mapper resource="mappers/EmployeeMapper.xml"/>
+        <mapper resource="mappers/DepartmentMapper.xml"/>
+    </mappers>
+</configuration>

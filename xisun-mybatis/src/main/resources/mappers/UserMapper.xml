@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- namespace 与 Mapper 接口的全类名保存一致 -->
+<mapper namespace="cn.xisun.mybatis.mapper.UserMapper">
+    <!-- id 属性的值与 Mapper 接口中的方法名保持一致 -->
+
+    <!-- int insertUser(); -->
+    <!--<insert id="insertUser">
+        INSERT INTO mybatis.`user` (name, sex, age, status)
+        VALUES ("张三", "男", 27, 1);
+    </insert>-->
+
+    <!-- int updateUser(); -->
+    <update id="updateUser">
+        UPDATE mybatis.`user` u
+        SET u.name = "李四"
+        WHERE u.id = 1;
+    </update>
+
+    <!-- int deleteUser(); -->
+    <delete id="deleteUser">
+        DELETE
+        FROM mybatis.`user` u
+        WHERE u.id = 2;
+    </delete>
+
+    <!-- User getUserById(); -->
+    <select id="getUserById" resultType="cn.xisun.mybatis.entity.User">
+        SELECT *
+        FROM mybatis.`user` u
+        WHERE u.id = 3;
+    </select>
+
+    <!-- List<User> getUserList(); -->
+    <select id="getUserList" resultType="cn.xisun.mybatis.entity.User">
+        SELECT *
+        FROM mybatis.`user`;
+    </select>
+
+    <!-- User getUserByName(String name); -->
+    <select id="getUserByName" resultType="cn.xisun.mybatis.entity.User">
+        <!-- SELECT * FROM mybatis.`user` u WHERE u.name = '${name}'; -->
+        SELECT * FROM mybatis.`user` u WHERE u.name = #{name};
+    </select>
+
+    <!-- User getUserByNameAndStatus(String name, Integer status); -->
+    <select id="getUserByNameAndStatus" resultType="cn.xisun.mybatis.entity.User">
+        <!-- SELECT * FROM mybatis.`user` u WHERE u.name = #{arg0} AND u.status = #{arg1}; -->
+        <!-- SELECT * FROM mybatis.`user` u WHERE u.name = #{param1} AND u.status = #{param2}; -->
+        SELECT * FROM mybatis.`user` u WHERE u.name = #{arg0} AND u.status = #{param2};
+    </select>
+
+    <!-- User getUserByMap(Map<String, Object> map); -->
+    <select id="getUserByMap" resultType="cn.xisun.mybatis.entity.User">
+        SELECT *
+        FROM mybatis.`user` u
+        WHERE u.name = #{name}
+          AND u.status = #{status};
+    </select>
+
+    <!-- int insertUser(User user); -->
+    <insert id="insertUser">
+        INSERT INTO mybatis.`user`
+        VALUES (null, #{name}, #{sex}, #{age}, #{status}, #{create_time}, #{update_time});
+    </insert>
+
+    <!-- User getUserByParam(@Param("name") String name, @Param("status") Integer status); -->
+    <select id="getUserByParam" resultType="cn.xisun.mybatis.entity.User">
+        SELECT * FROM mybatis.`user` u WHERE u.name = #{name} AND u.status = #{status};
+    </select>
+</mapper>
