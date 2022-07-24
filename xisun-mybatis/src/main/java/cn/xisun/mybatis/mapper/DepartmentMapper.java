@@ -25,4 +25,12 @@ public interface DepartmentMapper {
      * @return 部门实例
      */
     Department getDepartmentById(@Param("id") Integer id);
+
+    /**
+     * 分步查询第一步：获取部门信息
+     *
+     * @param id 部门id
+     * @return 部门实例
+     */
+    Department getDepartmentByStepOneById(@Param("id") Integer id);
 }

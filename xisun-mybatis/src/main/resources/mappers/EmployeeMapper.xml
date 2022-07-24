@@ -77,22 +77,36 @@
 
 
     <!-- 多对一映射，方式三：分步查询 -->
+    <!--<resultMap id="employee" type="cn.xisun.mybatis.entity.Employee">
+        <id property="id" column="id"></id>
+        <result property="empName" column="emp_name"></result>
+        <result property="age" column="age"></result>
+        <result property="sex" column="sex"></result>
+        &lt;!&ndash;
+            select：设置分步查询，查询某个属性的值的SQL的标识（namespace.sqlId）
+            column：将SQL以及查询结果中的某个字段设置为分步查询的条件
+        &ndash;&gt;
+        <association property="department" select="cn.xisun.mybatis.mapper.DepartmentMapper.getDepartmentByStepTwoById"
+                     column="dep_id" fetchType="eager">
+        </association>
+    </resultMap>-->
+
+    <!-- Employee getEmployeeByStepOneById(@Param("id") Integer id); -->
+    <!--<select id="getEmployeeByStepOneById" resultMap="employee">
+        SELECT * FROM mybatis.employee WHERE id = #{id};
+    </select>-->
+
+    <!-- 一对多映射，方式二：分布查询 -->
     <resultMap id="employee" type="cn.xisun.mybatis.entity.Employee">
         <id property="id" column="id"></id>
         <result property="empName" column="emp_name"></result>
         <result property="age" column="age"></result>
         <result property="sex" column="sex"></result>
-        <!--
-            select：设置分步查询，查询某个属性的值的SQL的标识（namespace.sqlId）
-            column：将SQL以及查询结果中的某个字段设置为分步查询的条件
-        -->
-        <association property="department" select="cn.xisun.mybatis.mapper.DepartmentMapper.getDepartmentByStepTwoById"
-                     column="dep_id" fetchType="eager">
-        </association>
+        <result property="depId" column="dep_id"></result>
     </resultMap>
 
-    <!-- Employee getEmployeeByStepOneById(@Param("id") Integer id); -->
-    <select id="getEmployeeByStepOneById" resultMap="employee">
-        SELECT * FROM mybatis.employee WHERE id = #{id};
+    <!-- Employee getEmployeeByStepTwoByDepId(@Param("dep_id") Integer dep_id); -->
+    <select id="getEmployeeByStepTwoByDepId" resultMap="employee">
+        SELECT * FROM mybatis.employee WHERE dep_id = #{depId};
     </select>
 </mapper>

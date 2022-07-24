@@ -35,4 +35,12 @@ public interface EmployeeMapper {
      * @return 员工实例
      */
     Employee getEmployeeByStepOneById(@Param("id") Integer id);
+
+    /**
+     * 分步查询第二步：获取部门信息中的员工信息
+     *
+     * @param depId 员工所属部门id
+     * @return 员工列表
+     */
+    List<Employee> getEmployeeByStepTwoByDepId(@Param("depId") Integer depId);
 }

@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.xisun.mybatis.mapper.DepartmentMapper">
+    <!-- 多对一映射，方式三：分步查询 -->
     <!--<resultMap id="department" type="cn.xisun.mybatis.entity.Department">
         <id property="id" column="id"></id>
         <result property="depName" column="dep_name"></result>
@@ -16,20 +17,45 @@
     </select>-->
 
 
-    <!-- 一对多映射，方式一： -->
-    <resultMap id="department" type="cn.xisun.mybatis.entity.Department">
-        <id property="id" column="id"></id>
+    <!-- 一对多映射，方式一：使用collection -->
+    <!--<resultMap id="department" type="cn.xisun.mybatis.entity.Department">
+        <id property="id" column="dep_id"></id>
         <result property="depName" column="dep_name"></result>
+        &lt;!&ndash;
+            collection：处理一对多的映射关系
+                属性：
+                    ofType：设置collection标签中所处理的集合属性中存储数据的类型
+        &ndash;&gt;
         <collection property="employees" ofType="cn.xisun.mybatis.entity.Employee">
-
+            <id property="id" column="emp_id"></id>
+            <result property="empName" column="emp_name"></result>
+            <result property="sex" column="sex"></result>
+            <result property="age" column="age"></result>
+            &lt;!&ndash; employees集合中的employee对象，不应该设置其department属性 &ndash;&gt;
         </collection>
-    </resultMap>
+    </resultMap>-->
 
     <!-- Department getDepartmentById(@Param("id") Integer id); -->
-    <select id="getDepartmentById" resultMap="department">
-        SELECT d.id, d.dep_name, e.emp_name, e.sex, e.age
+    <!--<select id="getDepartmentById" resultMap="department">
+        SELECT d.id dep_id, d.dep_name, e.id emp_id, e.emp_name, e.sex, e.age, e.dep_id
         FROM mybatis.department d
                  LEFT JOIN mybatis.employee e ON d.id = e.dep_id
         WHERE d.id = #{id};
+    </select>-->
+
+
+    <!-- 一对多映射，方式二：分布查询 -->
+    <resultMap id="department" type="cn.xisun.mybatis.entity.Department">
+        <id property="id" column="id"></id>
+        <result property="depName" column="dep_name"></result>
+        <!-- 根据department的id，查询对应的employee，因此，column列，填写的是department的id字段 -->
+        <collection property="employees" column="id" fetchType="lazy"
+                    select="cn.xisun.mybatis.mapper.EmployeeMapper.getEmployeeByStepTwoByDepId">
+        </collection>
+    </resultMap>
+
+    <!-- Department getDepartmentByStepOneById(@Param("id") Integer id); -->
+    <select id="getDepartmentByStepOneById" resultMap="department">
+        SELECT * FROM mybatis.department WHERE id = #{id};
     </select>
 </mapper>

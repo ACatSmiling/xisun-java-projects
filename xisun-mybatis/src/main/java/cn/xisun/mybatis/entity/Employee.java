@@ -23,5 +23,10 @@ public class Employee {
     /**
      * 多对一：Employee实例，对应一个Department实例
      */
-    private Department department;
+//    private Department department;
+
+    /**
+     * 一对多
+     */
+    private Integer depId;
 }

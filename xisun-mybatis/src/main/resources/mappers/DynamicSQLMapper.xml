@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.xisun.mybatis.mapper.DynamicSQLMapper">
+    <resultMap id="employee" type="cn.xisun.mybatis.entity.Employee">
+        <id property="id" column="id"></id>
+        <result property="empName" column="emp_name"></result>
+        <result property="age" column="age"></result>
+        <result property="sex" column="sex"></result>
+        <result property="depId" column="dep_id"></result>
+    </resultMap>
+
+    <!-- 动态SQL之if标签 -->
+    <!-- List<Employee> getEmployeesByConditions(Employee employee); -->
+    <!--<select id="getEmployeesByConditions" resultMap="employee">
+        SELECT * FROM mybatis.employee WHERE 1 = 1
+        &lt;!&ndash; test中的条件，此处是employee对象的属性名 &ndash;&gt;
+        <if test="empName != '' and empName != null">
+            AND emp_name = #{empName}
+        </if>
+        <if test="age != '' and age != null">
+            AND age = #{age}
+        </if>
+        <if test="sex != '' and sex != null">
+            AND sex = #{sex}
+        </if>
+        ;
+    </select>-->
+
+    <!-- 动态SQL之where标签 -->
+    <!-- List<Employee> getEmployeesByConditions(Employee employee); -->
+    <!--<select id="getEmployeesByConditions" resultMap="employee">
+        SELECT * FROM mybatis.employee
+        &lt;!&ndash; 当所有条件都不成立时，WHERE语句会省略 &ndash;&gt;
+        <where>
+            <if test="empName != '' and empName != null">
+                AND emp_name = #{empName}
+            </if>
+            <if test="age != '' and age != null">
+                AND age = #{age}
+            </if>
+            <if test="sex != '' and sex != null">
+                AND sex = #{sex}
+            </if>
+        </where>
+        ;
+    </select>-->
+
+    <!-- 动态SQL之trim标签 -->
+    <!-- List<Employee> getEmployeesByConditions(Employee employee); -->
+    <!--<select id="getEmployeesByConditions" resultMap="employee">
+        SELECT * FROM mybatis.employee
+        <trim prefix="WHERE" suffixOverrides="AND">
+            <if test="empName != '' and empName != null">
+                emp_name = #{empName} AND
+            </if>
+            <if test="age != '' and age != null">
+                age = #{age} AND
+            </if>
+            <if test="sex != '' and sex != null">
+                sex = #{sex} AND
+            </if>
+        </trim>
+        ;
+    </select>-->
+
+    <!-- 动态SQL之choose、when、otherwise标签 -->
+    <!-- List<Employee> getEmployeesByConditions(Employee employee); -->
+    <!--<select id="getEmployeesByConditions" resultMap="employee">
+        SELECT * FROM mybatis.employee
+        <where>
+            <choose>
+                &lt;!&ndash; when标签至少要有一个，otherwise标签至多只有一个 &ndash;&gt;
+                &lt;!&ndash; when标签的条件有一个满足时，后续的when标签忽略，如果when标签的条件都不满足，执行otherwise标签的语句 &ndash;&gt;
+                <when test="empName != '' and empName != null">
+                    emp_name = #{empName}
+                </when>
+                <when test="age != '' and age != null">
+                    age = #{age}
+                </when>
+                <when test="sex != '' and sex != null">
+                    sex = #{sex}
+                </when>
+                &lt;!&ndash; 如果前面when标签的条件都不满足，然后也没有传入depId值，查询结果为空，其SQL语句为：
+                     SELECT * FROM mybatis.employee WHERE dep_id = ? ;
+                &ndash;&gt;
+                <otherwise>
+                    dep_id = #{depId}
+                </otherwise>
+            </choose>
+        </where>
+        ;
+    </select>-->
+
+    <!-- 动态SQL之foreach标签 -->
+    <!-- Integer deleteEmployeesByArray(Integer[] ids); -->
+    <delete id="deleteEmployeesByArray">
+        DELETE FROM mybatis.employee 
+    </delete>
+</mapper>

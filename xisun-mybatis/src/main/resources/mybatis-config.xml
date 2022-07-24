@@ -36,5 +36,6 @@
         <mapper resource="mappers/SpecialSqlMapper.xml"/>
         <mapper resource="mappers/EmployeeMapper.xml"/>
         <mapper resource="mappers/DepartmentMapper.xml"/>
+        <mapper resource="mappers/DynamicSQLMapper.xml"/>
     </mappers>
 </configuration>
