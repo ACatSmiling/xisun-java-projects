@@ -94,8 +94,56 @@
     </select>-->
 
     <!-- 动态SQL之foreach标签 -->
-    <!-- Integer deleteEmployeesByArray(Integer[] ids); -->
+    <!--
+            属性：
+                collection：设置要循环的数组或集合
+                item：表示集合或数组中的每一个数据
+                separator：设置循环体之间的分隔符
+                open：设置foreach标签中的内容的开始符
+                close：设置foreach标签中的内容的结束符
+    -->
+    <!-- Integer deleteEmployeesByArray(@Param("ids") Integer[] ids); -->
+    <!--<delete id="deleteEmployeesByArray">
+        DELETE
+        FROM mybatis.employee
+        WHERE id IN
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+        ;
+    </delete>-->
+    <!-- 使用OR关键字实现批量删除 -->
     <delete id="deleteEmployeesByArray">
-        DELETE FROM mybatis.employee 
+        DELETE
+        FROM mybatis.employee
+        WHERE
+        <foreach collection="ids" item="id" separator="OR">
+            id = #{id}
+        </foreach>
+        ;
     </delete>
+
+    <!-- Integer insertEmployeesByList(@Param("employees") List<Employee> employees); -->
+    <insert id="insertEmployeesByList">
+        INSERT INTO mybatis.employee VALUES
+        <foreach collection="employees" item="employee" separator=",">
+            (
+            #{employee.id}, #{employee.empName}, #{employee.sex},
+            #{employee.age}, #{employee.depId}
+            )
+        </foreach>
+        ;
+    </insert>
+
+    <!-- sql片段内预定义的字段，通过include标签引用 -->
+    <sql id="employeeColumns">
+        id
+        , emp_name, sex, age, dep_id
+    </sql>
+
+    <!-- Employee getEmployeeById(@Param("id") Integer id); -->
+    <select id="getEmployeeById" resultMap="employee">
+        SELECT <include refid="employeeColumns"></include> FROM mybatis.employee
+        WHERE id = #{id};
+    </select>
 </mapper>

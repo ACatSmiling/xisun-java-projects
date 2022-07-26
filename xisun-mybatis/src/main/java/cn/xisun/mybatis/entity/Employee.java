@@ -3,6 +3,8 @@ package cn.xisun.mybatis.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @author WangDeSong
  * @version 1.0
@@ -11,7 +13,7 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class Employee {
+public class Employee implements Serializable {
     private Integer id;
 
     private String empName;
